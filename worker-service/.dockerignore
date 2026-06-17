@@ -1,0 +1,29 @@
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+
+# venv & local installs
+.venv
+pyvenv.cfg
+
+# model weights & outputs (mount at runtime, don't bake)
+models
+outputs
+assets
+
+# build/dist
+dist
+build
+*.egg-info
+
+# tests/dev
+tests
+
+# IDE/OS
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store

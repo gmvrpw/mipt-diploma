@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package task;
+
+message Add {
+  string id = 1;
+  string character_path = 2;
+  string asset_path = 3;
+  string prompt = 4;
+  optional string negative_prompt = 5;
+}
+
+message AddCompleted {
+  string task_id = 1;
+  string character_path = 2;
+}

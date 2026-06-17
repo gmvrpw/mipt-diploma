@@ -1,0 +1,9 @@
+version: v1
+models:
+  dir: "./models"
+device:
+  gpu_mem: 60GiB
+outputs:
+  dir: "./assets/outputs"
+  retries: 2
+  timeout: 10s

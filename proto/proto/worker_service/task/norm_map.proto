@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package task;
+
+message NormMap {
+  string id = 1;
+  string frames_path = 2;
+}
+
+message NormMapCompleted {
+  string task_id = 1;
+  string frames_path = 2;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package task;
+
+message Stand {
+  string id = 1;
+  string character_path = 2;
+  optional string pose_path = 3;
+  string prompt = 4;
+  optional string negative_prompt = 5;
+}
+
+message StandCompleted {
+  string task_id = 1;
+  string character_path = 2;
+}

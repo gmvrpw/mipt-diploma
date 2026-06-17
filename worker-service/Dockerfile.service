@@ -1,0 +1,52 @@
+# syntax=docker/dockerfile:1.9
+#
+# Service worker image: Kafka + S3 + Loki + Prometheus, no local filesystem
+# storage. Requires the proto-worker-service sibling repo (it is referenced
+# by pyproject as a path dep `../proto/python/worker_service`).
+#
+# Build (from worker-service/), attaching the proto sibling as a named context:
+#   docker build -f Dockerfile.service \
+#       --build-context proto=../proto \
+#       -t worker:service .
+#
+# Run with GPU, host networking (so the container can reach localhost:9092
+# Kafka, minio.local, loki.local, etc. on the host), and Prometheus port:
+#   docker run --rm --gpus all \
+#       --network host \
+#       -v $PWD/config:/app/config:ro \
+#       -v $PWD/models:/app/models \
+#       worker:service \
+#       -c /app/config/service.yml
+#
+# IMPORTANT: paths in YAML configs must be ABSOLUTE inside the container
+# (e.g. /app/models), because the service config resolves relative paths
+# against the console-script location, not CWD.
+
+ARG PYTHON_VERSION=3.11
+
+FROM python:${PYTHON_VERSION}-slim
+
+COPY --from=ghcr.io/astral-sh/uv:0.5.0 /uv /uvx /usr/local/bin/
+
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# proto-worker-service is referenced by pyproject as `../proto/python/worker_service`.
+# Pyproject lives at /app, so relative resolves to /proto/python/worker_service.
+COPY --from=proto python/worker_service /proto/python/worker_service
+
+COPY pyproject.toml README.md ./
+COPY src ./src
+COPY standalone.py service.py ./
+
+RUN uv pip install --system --no-cache '.[service]'
+
+EXPOSE 9100
+
+ENTRYPOINT ["worker-service"]
+CMD ["--help"]

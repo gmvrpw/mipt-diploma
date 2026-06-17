@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package task;
+
+import "task/add.proto";
+import "task/delete.proto";
+import "task/stand.proto";
+import "task/animate.proto";
+import "task/rmbg.proto";
+import "task/norm_map.proto";
+
+import "task/status.proto";
+
+message Task {
+  oneof task {
+    Add add = 1;
+    Delete delete = 2;
+    Stand stand = 3;
+    Animate animate = 4;
+    Rmbg rmbg = 5;
+    NormMap norm_map = 6;
+  }
+}
+
+message TaskStatus {
+  oneof status {
+    Failed failed = 1;
+    AddCompleted add_completed = 2;
+    DeleteCompleted delete_completed = 3;
+    StandCompleted stand_completed = 4;
+    AnimateCompleted animate_completed = 5;
+    RmbgCompleted rmbg_completed = 6;
+    NormMapCompleted norm_map_completed = 7;
+  }
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package task;
+
+message Rmbg {
+  string id = 1;
+  string frames_path = 2;
+}
+
+message RmbgCompleted {
+  string task_id = 1;
+  string frames_path = 2;
+}

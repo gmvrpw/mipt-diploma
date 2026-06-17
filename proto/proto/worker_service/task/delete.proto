@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package task;
+
+message Delete {
+  string id = 1;
+  string character_path = 2;
+  string prompt = 3;
+  optional string negative_prompt = 4;
+}
+
+message DeleteCompleted {
+  string task_id = 1;
+  string character_path = 2;
+}

@@ -1,0 +1,34 @@
+version: v1
+name: Looped running animation with mask and normal map
+
+inputs:
+  first_frame: null
+
+tasks:
+  - id: animate
+    name: Looped running animation
+    type: animate
+    inputs:
+      first_frame: pipeline.inputs.first_frame
+      prompt: >-
+        A character running in place at a steady pace, legs alternating in
+        a smooth cyclical stride, arms swinging naturally in rhythm with
+        the steps. Torso leans slightly forward, shoulders relaxed, head
+        facing forward with focused expression. Energetic athletic motion,
+        consistent running cadence, feet lifting and landing in a clean
+        loop. Sharp focus on the body, well-defined silhouette, natural
+        soft lighting, steady locked-off camera, cinematic medium shot,
+        photorealistic detail, seamless looping motion.
+      loop: true
+
+  - id: rmbg
+    name: Remove background
+    type: rmbg
+    inputs:
+      frames: animate.outputs.frames
+
+  - id: norm_map
+    name: Normal map
+    type: norm_map
+    inputs:
+      frames: animate.outputs.frames

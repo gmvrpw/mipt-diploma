@@ -1,0 +1,9 @@
+version: v1
+inputs:
+  character: "assets/inputs/girl.png"
+tasks:
+  - name: Удаляем лишние объекты
+    type: delete
+    inputs:
+      character: pipeline.inputs.character
+      prompt: "Remove any items from the character's hands"

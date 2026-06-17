@@ -1,0 +1,8 @@
+"""Pytest setup: ensure repository root is on sys.path so 'src' is importable
+when running tests from anywhere."""
+import sys
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))

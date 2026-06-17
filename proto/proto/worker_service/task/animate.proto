@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package task;
+
+message Animate {
+  string id = 1;
+  string first_frame_path = 2;
+  optional string last_frame_path = 3;
+  string prompt = 4;
+  uint32 num_frames = 5;
+  optional bool loop = 6;
+}
+
+message AnimateCompleted {
+  string task_id = 1;
+  string frames_path = 2;
+}

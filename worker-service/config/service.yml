@@ -1,0 +1,62 @@
+version: v1
+
+models:
+  dir: models
+
+device:
+  gpu_mem: 60GiB
+
+storage:
+  type: aws
+  bucket: worker-service-assets
+  prefix: dev
+  region_name: us-east-1
+  endpoint_url: http://minio.local:9000
+  credentials:
+    aws_access_key_id: dev
+    aws_secret_access_key: devsecret
+  config:
+    connect_timeout: 5
+    read_timeout: 30
+    retries:
+      max_attempts: 5
+      mode: standard
+    addressing_style: path
+
+tasks:
+  - type: kafka
+    connection:
+      bootstrap_servers: localhost:9092
+      client_id: worker-service
+    consumer:
+      group_id: worker-service-rmbg
+      topics: [tasks.rmbg]
+    publisher:
+      topic: tasks.rmbg.results
+
+cancellation:
+  - type: kafka
+    connection:
+      bootstrap_servers: localhost:9092
+      client_id: worker-service-cancel
+    consumer:
+      group_id: worker-service-cancel
+      topics: [tasks.cancel]
+  - type: rest
+    path: https://api.example/tasks/{task_id}/cancelled
+    method: GET
+    authorization:
+      header: "Authorization: Bearer test-token"
+    timeout_seconds: 2.0
+    verify_ssl: true
+
+logs:
+  - type: loki
+    url: http://loki.local:3100
+    labels:
+      service: worker-service
+
+metrics:
+  - type: prometheus
+    port: 9100
+    namespace: worker_service
